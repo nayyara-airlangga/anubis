@@ -1,0 +1,31 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo 'Checking your code formatting, linting, and typing your project before committing...'
+
+# Check if the code style is up to Prettier standards
+echo "Lets check the format first."
+
+yarn check-format || (
+    echo 'Failed to pass format checks. It seems your code still needs to be formatted. Try running yarn format in your terminal.'
+    false
+)
+
+# Check if your code is properly linted to ESLint standards
+echo "Nice. Now let's check the linting."
+
+yarn check-lint || (
+    echo 'Failed to pass linting checks. It seems your code still has a few errors. Please fix them before committing.'
+    false
+)
+
+# Run type-checking on your code
+echo "Let's check your typing."
+
+yarn check-types || (
+    echo 'Failed to pass typing checks. It seems your code still has typing issues. Please fix them before committing.'
+    false
+)
+
+# After passing all the tests, let's finally commit
+echo 'All right then. Your code looks great. Hope it passes the review :D'
