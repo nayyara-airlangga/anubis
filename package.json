@@ -14,9 +14,14 @@
     "postinstall": "husky install"
   },
   "dependencies": {
+    "axios": "^0.25.0",
+    "crypto-es": "^1.2.7",
     "next": "12.0.10",
+    "next-react-svg": "^1.1.3",
+    "nookies": "^2.5.2",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "swr": "^1.2.1"
   },
   "devDependencies": {
     "@types/node": "17.0.15",
