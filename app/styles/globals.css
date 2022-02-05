@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Karla:wght@300;400;700&display=swap");
+
+@tailwind base;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    user-select: none;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: #2f3136;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  textarea,
+  input[type="text"] {
+    user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #e5e5e5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #909090;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #636363;
+  }
+}
+
+@tailwind components;
+
+@tailwind utilities;
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .selectable {
+    user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+  }
+
+  .not-selectable {
+    user-select: none;
+  }
+}
