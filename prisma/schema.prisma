@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique @db.VarChar(255)
+  username String  @unique @db.VarChar(255)
+  name     String  @db.VarChar(255)
+  password String  @db.VarChar(255)
+  bio      String? @db.VarChar(225)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  posts    Post[]    @relation("UserToPosts")
+  comments Comment[] @relation("UserToComments")
+
+  @@map("users")
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String  @db.VarChar(255)
+  slug      String  @unique @db.VarChar(255)
+  content   String  @db.Text
+  published Boolean @default(false)
+
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  editedAt    DateTime  @updatedAt @map("edited_at") @db.Timestamptz()
+  publishedAt DateTime? @map("published_at") @db.Timestamptz()
+
+  authorId Int  @map("author_id")
+  author   User @relation("UserToPosts", fields: [authorId], references: [id])
+
+  comments Comment[]   @relation("PostToComments")
+  tags     PostToTag[]
+
+  @@map("posts")
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  posts PostToTag[]
+
+  @@map("tags")
+}
+
+model PostToTag {
+  postId Int  @map("post_id")
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  tagId Int @map("tag_id")
+  tag   Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now()) @map("assigned_at") @db.Timestamptz()
+
+  @@id([postId, tagId])
+  @@map("posts_to_tags")
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  comment String @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  editedAt  DateTime @updatedAt @map("edited_at") @db.Timestamptz()
+
+  postId Int  @map("post_id")
+  post   Post @relation("PostToComments", fields: [postId], references: [id])
+
+  authorId Int  @map("author_id")
+  author   User @relation("UserToComments", fields: [authorId], references: [id])
+
+  parentId Int?      @map("parent_id")
+  parent   Comment?  @relation("ParentToReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("ParentToReplies")
+
+  @@map("comments")
+}

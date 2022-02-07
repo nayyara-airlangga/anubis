@@ -6,6 +6,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "migrate:dev": "yarn prisma migrate dev",
+    "migrate:reset": "yarn prisma migrate reset",
+    "seed": "yarn prisma db seed",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "test": "start-server-and-test 'yarn dev' 3000 cypress:open",
@@ -17,7 +20,12 @@
     "check-all": "yarn check-format && yarn check-lint && yarn check-types",
     "postinstall": "husky install"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"commonjs\"} prisma/seed.ts"
+  },
   "dependencies": {
+    "@prisma/client": "^3.9.1",
+    "@prisma/migrate": "^3.9.1",
     "axios": "^0.25.0",
     "crypto-es": "^1.2.7",
     "next": "12.0.10",
@@ -40,8 +48,10 @@
     "husky": "^7.0.4",
     "postcss": "^8.4.6",
     "prettier": "^2.5.1",
+    "prisma": "^3.9.1",
     "start-server-and-test": "^1.14.0",
     "tailwindcss": "^3.0.18",
+    "ts-node": "^10.4.0",
     "typescript": "4.5.5"
   }
 }

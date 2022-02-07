@@ -19,6 +19,8 @@
     "paths": {
       "@components": ["app/components"],
       "@components/*": ["app/components/*"],
+      "@config": ["app/config"],
+      "@config/*": ["app/config/*"],
       "@constants": ["app/constants"],
       "@contexts": ["app/contexts"],
       "@contexts/": ["app/contexts/*"],
