@@ -4,6 +4,7 @@ interface User {
   username: string
   name: string
   bio?: string
+  password?: string
 }
 
 export type { User }
