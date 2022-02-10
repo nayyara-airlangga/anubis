@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client"
 
-import { UserSeed } from "./seeds"
+import { PostSeed, UserSeed } from "./seeds"
 
 const prisma = new PrismaClient()
 
 const main = async () => {
   await prisma.user.createMany({ data: UserSeed })
+  await prisma.post.createMany({ data: PostSeed })
 }
 
 const runMain = async () => {
