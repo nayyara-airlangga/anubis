@@ -20,8 +20,12 @@ model User {
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
-  posts    Post[]    @relation("UserToPosts")
-  comments Comment[] @relation("UserToComments")
+  followers Follow[] @relation("FollowerUsers")
+  following Follow[] @relation("FollowingUsers")
+
+  posts     Post[]          @relation("UserToPosts")
+  comments  Comment[]       @relation("UserToComments")
+  interests FollowerToTag[]
 
   @@map("users")
 }
@@ -52,9 +56,36 @@ model Tag {
 
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
 
-  posts PostToTag[]
+  followers FollowerToTag[]
+  posts     PostToTag[]
 
   @@map("tags")
+}
+
+model Follow {
+  followerId Int  @map("follower_id")
+  follower   User @relation("FollowerUsers", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followingId Int  @map("following_id")
+  following   User @relation("FollowingUsers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now()) @map("assigned_at") @db.Timestamptz()
+
+  @@id([followerId, followingId])
+  @@map("follows")
+}
+
+model FollowerToTag {
+  followerId Int  @map("follower_id")
+  follower   User @relation(fields: [followerId], references: [id], onDelete: Cascade)
+
+  tagId Int @map("tag_id")
+  tag   Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  assignedAt DateTime @default(now()) @map("assigned_at") @db.Timestamptz()
+
+  @@id([followerId, tagId])
+  @@map("followers_to_tags")
 }
 
 model PostToTag {
