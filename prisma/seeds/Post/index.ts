@@ -29,6 +29,12 @@ const PostSeed = [
     slug: "post-5",
     authorId: 3,
   },
+  {
+    title: "Post 6",
+    content: "Post 6 Content",
+    slug: "post-6",
+    authorId: 3,
+  },
 ]
 
 export { PostSeed }
