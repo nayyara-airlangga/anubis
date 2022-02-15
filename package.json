@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "generate": "yarn prisma generate",
     "migrate:dev": "yarn prisma migrate dev",
     "migrate:reset": "yarn prisma migrate reset",
     "seed": "yarn prisma db seed",
