@@ -50,6 +50,8 @@ WORKDIR /snippets
 # Remove all the development dependencies and copy the prisma folder to
 # generate the prisma client inside of the node_modules
 RUN yarn install --production --frozen-lockfile --ignore-scripts --prefer-offline
+COPY --from=dependencies /snippets/node_modules ./node_modules
+COPY package.json ./
 COPY prisma prisma
 RUN yarn generate
 RUN cp -R node_modules production_node_modules
