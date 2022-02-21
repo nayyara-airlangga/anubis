@@ -3,24 +3,25 @@ version: "3.9"
 services:
   frontend:
     build: ./
-    container_name: snippets
+    container_name: snippets-frontend
     deploy:
       restart_policy:
         condition: on-failure
         max_attempts: 3
       resources:
         limits:
+          cpus: "0.1"
           memory: "1g"
     env_file:
       - .env
     ports:
       - "3000:3000"
     volumes:
-      - snippets_frontend:/usr/src/snippets
+      - frontend:/usr/src/snippets
       - /usr/src/snippets/node_modules
       - /usr/src/snippets/.next
     depends_on:
-      - snippets_db
+      - db
 
   db:
     image: postgres
@@ -30,13 +31,14 @@ services:
         condition: on-failure
       resources:
         limits:
+          cpus: "0.1"
           memory: "2g"
     environment:
       - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     volumes:
-      - snippets_db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -50,15 +52,16 @@ services:
         max_attempts: 3
       resources:
         limits:
+          cpus: "0.1"
           memory: "2g"
     env_file:
       - .env
     volumes:
-      - snippets_pgadmin:/var/lib/pgadmin
+      - pgadmin:/var/lib/pgadmin
     ports:
       - "5050:80"
 
 volumes:
-  snippets_frontend:
-  snippets_db:
-  snippets_pgadmin:
+  frontend:
+  db:
+  pgadmin:
