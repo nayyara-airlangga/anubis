@@ -24,7 +24,7 @@ services:
 
   db:
     image: postgres
-    container_name: snippets_db
+    container_name: snippets-db
     deploy:
       restart_policy:
         condition: on-failure
@@ -42,7 +42,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: snippets_pgadmin
+    container_name: snippets-pgadmin
     restart: always
     deploy:
       restart_policy:
