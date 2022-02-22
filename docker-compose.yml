@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  frontend:
+  app:
     build: ./
-    container_name: snippets-frontend
+    container_name: snippets-app
     deploy:
       restart_policy:
         condition: on-failure
@@ -17,7 +17,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - frontend:/usr/src/snippets
+      - app:/usr/src/snippets
       - /usr/src/snippets/node_modules
       - /usr/src/snippets/.next
     depends_on:
@@ -62,6 +62,6 @@ services:
       - "5050:80"
 
 volumes:
-  frontend:
+  app:
   db:
   pgadmin:

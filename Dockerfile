@@ -84,4 +84,4 @@ USER nextjs
 
 EXPOSE 3000
 
-CMD ["yarn", "start:ci"]
+CMD ["yarn", "deploy"]
