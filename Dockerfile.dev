@@ -1,0 +1,67 @@
+# Dockerfile configurations for snippets_dev-dev
+
+# It consists of four image configurations:
+# 1. Dependencies
+# 2. Builder
+# 3. Runner
+
+# Dependencies Image:
+
+# Install dependencies only when needed
+FROM node:alpine AS dependencies
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /snippets_dev
+
+# Copy only the package.json and yarn.lock files so
+# that the installation is only recomputed if any of
+# the dependency files change
+COPY package.json yarn.lock ./
+RUN yarn
+
+# ----------------------------------------------------
+
+# Builder Image:
+
+# Build or rebuild application only when needed
+FROM node:alpine AS builder
+
+WORKDIR /snippets_dev
+
+# Copy the source code and the dependencies from the dependencies image
+COPY . .
+COPY --from=dependencies /snippets_dev/node_modules ./node_modules
+
+RUN yarn generate
+RUN yarn build
+
+# ----------------------------------------------------
+
+# Runner Image
+
+# Runs the application in a production environment
+FROM node:alpine AS runner
+
+WORKDIR /snippets_dev
+ENV NODE_ENV development
+
+# Create the user and its group
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy the build files from the builder image
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/.env ./
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/next.config.js ./
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/public ./public
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /snippets_dev/package.json ./package.json
+
+# Set user to nextjs in order to run the commands
+USER nextjs
+
+EXPOSE 3000
+
+CMD ["yarn", "deploy:dev"]

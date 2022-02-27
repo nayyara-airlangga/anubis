@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+  app_dev:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    container_name: snippets-app-dev
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "1g"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DEV_DATABASE_URL}
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./:/snippets_dev
+      - /snippets_dev/node_modules
+      - /snippets_dev/.next
+    depends_on:
+      - db_dev
+
+  db_dev:
+    image: postgres
+    container_name: snippets-db-dev
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "2g"
+    environment:
+      - POSTGRES_DB=${DEV_DATABASE_NAME}
+      - POSTGRES_USER=${DEV_DATABASE_USER}
+      - POSTGRES_PASSWORD=${DEV_DATABASE_PASSWORD}
+    volumes:
+      - db_dev:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  pgadmin_dev:
+    image: dpage/pgadmin4
+    container_name: snippets-pgadmin-dev
+    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "2g"
+    env_file:
+      - .env
+    volumes:
+      - pgadmin_dev:/var/lib/pgadmin
+    ports:
+      - "5055:80"
+
+volumes:
+  db_dev:
+  pgadmin_dev:

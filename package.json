@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "deploy": "yarn migrate:deploy && yarn start",
+    "deploy:dev": "yarn migrate:dev && yarn dev",
     "lint": "next lint",
     "generate": "yarn prisma generate",
     "migrate:deploy": "yarn prisma migrate deploy",
