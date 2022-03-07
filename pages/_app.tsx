@@ -1,14 +1,16 @@
 import type { AppProps } from "next/app"
 
-import { AuthProvider } from "@contexts"
+import { AuthProvider, ThemeProvider } from "@contexts"
 
 import "@styles/globals.css"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      <Component {...pageProps} />
-    </AuthProvider>
+    <ThemeProvider defaultTheme="dark">
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
