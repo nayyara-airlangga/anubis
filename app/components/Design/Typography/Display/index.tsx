@@ -5,6 +5,7 @@ interface DisplayProps extends TypographyProps {
 }
 
 const Display = ({
+  font = "default",
   className = "",
   variant,
   weight = "regular",
@@ -16,7 +17,13 @@ const Display = ({
     case "d1":
       return (
         <h1
-          className={`${size ?? "text-[72px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[72px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -32,7 +39,13 @@ const Display = ({
     case "d2":
       return (
         <h2
-          className={`${size ?? "text-[60px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[60px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"

@@ -15,6 +15,7 @@ module.exports = {
     },
     fontFamily: {
       karla: ["Karla", "sans-serif"],
+      nunito: ["Nunito", "sans-serif"],
     },
     extend: {},
   },

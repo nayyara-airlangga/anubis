@@ -1,4 +1,5 @@
 interface TypographyProps {
+  font?: "default" | "karla" | "nunito"
   className?: string
   weight?: "bold" | "regular" | "light"
   size?: string

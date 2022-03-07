@@ -5,6 +5,7 @@ interface HeadingProps extends TypographyProps {
 }
 
 const Heading = ({
+  font = "default",
   className = "",
   variant,
   weight = "regular",
@@ -16,7 +17,13 @@ const Heading = ({
     case "h1":
       return (
         <h1
-          className={`${size ?? "text-[48px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[48px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -32,7 +39,13 @@ const Heading = ({
     case "h2":
       return (
         <h2
-          className={`${size ?? "text-[36px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[36px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -48,7 +61,13 @@ const Heading = ({
     case "h3":
       return (
         <h3
-          className={`${size ?? "text-[32px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[32px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -64,7 +83,13 @@ const Heading = ({
     case "h4":
       return (
         <h4
-          className={`${size ?? "text-[28px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[28px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -80,7 +105,13 @@ const Heading = ({
     case "h5":
       return (
         <h5
-          className={`${size ?? "text-[24px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[24px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -96,7 +127,13 @@ const Heading = ({
     case "h6":
       return (
         <h6
-          className={`${size ?? "text-[24px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[24px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"

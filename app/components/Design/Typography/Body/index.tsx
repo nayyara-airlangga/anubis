@@ -5,6 +5,7 @@ interface BodyProps extends TypographyProps {
 }
 
 const Body = ({
+  font = "default",
   className = "",
   variant,
   weight = "regular",
@@ -16,7 +17,13 @@ const Body = ({
     case "b1":
       return (
         <p
-          className={`${size ?? "text-[24px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[24px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -32,7 +39,13 @@ const Body = ({
     case "b2":
       return (
         <p
-          className={`${size ?? "text-[20px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[20px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -48,7 +61,13 @@ const Body = ({
     case "b3":
       return (
         <p
-          className={`${size ?? "text-[16px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[16px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
@@ -64,7 +83,13 @@ const Body = ({
     case "b4":
       return (
         <p
-          className={`${size ?? "text-[14px]"} ${
+          className={`${
+            font === "karla"
+              ? "font-karla"
+              : font === "nunito"
+              ? "font-nunito"
+              : ""
+          } ${size ?? "text-[14px]"} ${
             weight === "bold"
               ? "font-bold"
               : weight === "light"
