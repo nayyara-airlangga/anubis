@@ -1,7 +1,7 @@
 interface LoginData {
   username: string
   password: string
-  rememberMe: false
+  rememberMe: boolean
 }
 
 interface RegisterData extends LoginData {
