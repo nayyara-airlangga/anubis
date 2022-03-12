@@ -52,7 +52,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = async (registerData: RegisterData) => {
     try {
-      const { data } = await axios.post("/api/auth/login", registerData)
+      const { data } = await axios.post("/api/auth/register", registerData)
 
       switch (data.status) {
         case "success":

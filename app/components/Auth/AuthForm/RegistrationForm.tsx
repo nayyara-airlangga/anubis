@@ -1,9 +1,19 @@
+import { useState } from "react"
+
 import { Body, Button, InputField } from "@components"
+import { LoadStatus } from "@constants"
+import { useAuth } from "@hooks"
 
 import { useAuthForm } from "./hooks"
 
 const RegistrationForm = () => {
+  const { register } = useAuth()
   const { registerData, setRegisterData } = useAuthForm()
+
+  const [registerStatus, setRegisterStatus] = useState<LoadStatus>(
+    LoadStatus.SUCCESS
+  )
+  const [errorMessage, setErrorMessage] = useState("")
 
   const registrationFormChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -11,6 +21,23 @@ const RegistrationForm = () => {
     const value = event.target.value
 
     setRegisterData({ ...registerData, [event.target.name]: value })
+  }
+
+  const submitRegisterData = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+
+    setRegisterStatus(LoadStatus.LOADING)
+    setErrorMessage("")
+
+    const { status, message } = await register(registerData)
+
+    setRegisterStatus(status)
+
+    if (status === LoadStatus.ERROR) {
+      setErrorMessage(message)
+    }
   }
 
   return (
@@ -71,11 +98,30 @@ const RegistrationForm = () => {
       <label htmlFor="rememberMe" className="pl-2.5 dark:text-white">
         Remember Me?
       </label>
-      <Button className="mt-6 mb-4 w-full">
+      <Button
+        type="submit"
+        onClick={submitRegisterData}
+        isDisabled={
+          !registerData.username ||
+          !registerData.name ||
+          !registerData.email ||
+          !registerData.password ||
+          !registerData.confirmPassword ||
+          registerData.password !== registerData.confirmPassword
+        }
+        className={`${
+          registerStatus === LoadStatus.LOADING && "animate-pulse"
+        } mt-6 mb-4 w-full`}
+      >
         <Body variant="b3" weight="bold">
-          Register
+          {registerStatus === LoadStatus.LOADING ? "Loading..." : "Register"}
         </Body>
       </Button>
+      {registerStatus === LoadStatus.ERROR && (
+        <Body variant="b3" className="relative -mt-2 mb-4 text-red-500">
+          {errorMessage}
+        </Body>
+      )}
     </>
   )
 }
