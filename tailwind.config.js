@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  darkMode: "media",
+  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./app/components/**/*.{js,ts,jsx,tsx}",
@@ -15,6 +15,7 @@ module.exports = {
     },
     fontFamily: {
       karla: ["Karla", "sans-serif"],
+      nunito: ["Nunito", "sans-serif"],
     },
     extend: {},
   },

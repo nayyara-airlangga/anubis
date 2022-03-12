@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
-    container_name: snippets-app-dev
+    container_name: postwrite-app-dev
     deploy:
       restart_policy:
         condition: on-failure
@@ -20,15 +20,15 @@ services:
     ports:
       - "3001:3000"
     volumes:
-      - ./:/snippets_dev
-      - /snippets_dev/node_modules
-      - /snippets_dev/.next
+      - ./:/app_dev
+      - /app_dev/node_modules
+      - /app_dev/.next
     depends_on:
       - db_dev
 
   db_dev:
     image: postgres
-    container_name: snippets-db-dev
+    container_name: postwrite-db-dev
     deploy:
       restart_policy:
         condition: on-failure
@@ -47,7 +47,7 @@ services:
 
   pgadmin_dev:
     image: dpage/pgadmin4
-    container_name: snippets-pgadmin-dev
+    container_name: postwrite-pgadmin-dev
     restart: always
     deploy:
       restart_policy:

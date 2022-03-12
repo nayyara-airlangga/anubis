@@ -3,7 +3,7 @@ version: "3.9"
 services:
   app:
     build: ./
-    container_name: snippets-app
+    container_name: postwrite-app
     deploy:
       restart_policy:
         condition: on-failure
@@ -17,15 +17,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - app:/usr/src/snippets
-      - /usr/src/snippets/node_modules
-      - /usr/src/snippets/.next
+      - app:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
     depends_on:
       - db
 
   db:
     image: postgres
-    container_name: snippets-db
+    container_name: postwrite-db
     deploy:
       restart_policy:
         condition: on-failure
@@ -44,7 +44,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: snippets-pgadmin
+    container_name: postwrite-pgadmin
     restart: always
     deploy:
       restart_policy:
