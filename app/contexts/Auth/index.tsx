@@ -64,7 +64,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error: any) {
       push("/auth")
-      return { status: LoadStatus.ERROR, message: error.message }
+      return { status: LoadStatus.ERROR, message: error.response.data.message }
     }
   }
 
@@ -82,7 +82,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error: any) {
       push("/auth")
-      return { status: LoadStatus.ERROR, message: error.message }
+      return { status: LoadStatus.ERROR, message: error.response.data.message }
     }
   }
 

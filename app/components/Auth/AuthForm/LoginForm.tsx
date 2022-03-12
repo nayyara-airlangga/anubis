@@ -1,9 +1,17 @@
+import { useState } from "react"
+
 import { Body, Button, InputField } from "@components"
+import { LoadStatus } from "@constants"
+import { useAuth } from "@hooks"
 
 import { useAuthForm } from "./hooks"
 
 const LoginForm = () => {
+  const { login } = useAuth()
   const { loginData, setLoginData } = useAuthForm()
+
+  const [loginStatus, setLoginStatus] = useState<LoadStatus>(LoadStatus.SUCCESS)
+  const [errorMessage, setErrorMessage] = useState("")
 
   const loginFormChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -11,6 +19,23 @@ const LoginForm = () => {
     const value = event.target.value
 
     setLoginData({ ...loginData, [event.target.name]: value })
+  }
+
+  const submitLoginData = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+
+    setLoginStatus(LoadStatus.LOADING)
+    setErrorMessage("")
+
+    const { status, message } = await login(loginData)
+
+    setLoginStatus(status)
+
+    if (status === LoadStatus.ERROR) {
+      setErrorMessage(message)
+    }
   }
 
   return (
@@ -46,11 +71,23 @@ const LoginForm = () => {
       <label htmlFor="rememberMe" className="pl-2.5 dark:text-white">
         Remember Me?
       </label>
-      <Button className="mt-6 mb-4 w-full">
+      <Button
+        type="submit"
+        onClick={submitLoginData}
+        isDisabled={loginData.username === "" || loginData.password === ""}
+        className={`${
+          loginStatus === LoadStatus.LOADING && "animate-pulse"
+        } mt-6 mb-4 w-full`}
+      >
         <Body variant="b3" weight="bold">
-          Login
+          {loginStatus === LoadStatus.LOADING ? "Loading..." : "Login"}
         </Body>
       </Button>
+      {loginStatus === LoadStatus.ERROR && (
+        <Body variant="b3" className="relative -mt-2 mb-4 text-red-500">
+          {errorMessage}
+        </Body>
+      )}
     </>
   )
 }

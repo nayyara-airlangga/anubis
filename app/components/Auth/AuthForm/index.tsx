@@ -18,7 +18,7 @@ const AuthForm = () => {
   }
 
   return (
-    <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90%] tablet:w-auto tablet:min-w-[350px] tablet:max-w-[400px] dark:bg-neutral-700 rounded-md p-4">
+    <form className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[90%] tablet:w-auto tablet:min-w-[350px] tablet:max-w-[400px] dark:bg-neutral-700 rounded-md p-4">
       <Heading
         variant="h2"
         weight="bold"
@@ -41,7 +41,7 @@ const AuthForm = () => {
             : "Already have an account?"}
         </Body>
       </Button>
-    </div>
+    </form>
   )
 }
 
