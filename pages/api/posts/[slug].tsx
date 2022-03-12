@@ -18,7 +18,7 @@ export const config = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (req.method !== "POST") {
+    if (req.method !== "PUT") {
       throw Error("Method not allowed")
     }
 
@@ -43,36 +43,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Permission denied")
     }
 
+    const { slug } = req.query
+
+    const postToEdit = await prisma.post.findUnique({
+      where: { slug: slug as string },
+    })
+
+    if (!postToEdit) {
+      throw Error("Post not found")
+    }
+
     const { title, content, published } = req.body
-    const id = payload.id
 
-    const posts = await prisma.post.findMany({ where: { title } })
-
-    let samePosts = 0
-
-    while (samePosts !== posts.length) {
-      samePosts++
-    }
-
-    let slug = slugify(title)
-
-    if (samePosts > 0) {
-      slug = `${slug}-${samePosts}`
-    }
-
-    const post = await prisma.post.create({
+    const post = await prisma.post.update({
+      where: { slug: slug as string },
       data: {
         title,
-        slug,
         content,
-        published: published ?? false,
-        authorId: id,
+        published,
       },
     })
 
     res
       .status(200)
-      .send({ status: "success", message: "Post created successfully", post })
+      .send({ status: "success", message: "Post updated successfully", post })
   } catch (error: any) {
     res
       .status(
@@ -80,6 +74,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ? 405
           : error.message === "Permission denied"
           ? 403
+          : error.message === "Post not found"
+          ? 404
           : 401
       )
       .send({
