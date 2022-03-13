@@ -16,8 +16,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { slug } = req.query
 
-    const post = await prisma.post.findUnique({
+    const postOfTheComments = await prisma.post.findUnique({
       where: { slug: slug as string },
+    })
+
+    if (!postOfTheComments) {
+      throw Error("Post not found")
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { post: { slug: slug as string } },
       include: {
         author: {
           select: {
@@ -28,16 +36,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             createdAt: true,
           },
         },
+        replies: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                email: true,
+                createdAt: true,
+              },
+            },
+          },
+        },
       },
     })
 
-    if (!post) {
-      throw Error("Post not found")
-    }
-
-    res
-      .status(200)
-      .send({ status: "success", message: "Post fetched successfully", post })
+    res.status(200).send({
+      status: "success",
+      message: "Comments fetched successfully",
+      comments,
+    })
   } catch (error: any) {
     res
       .status(

@@ -5,7 +5,8 @@ const CommentPage = () => {
     <button
       onClick={async () => {
         await axios.post("/api/posts/anjay-mabar/comments/create", {
-          comment: "Cool post bro",
+          comment: "Another cool post bro",
+          parentId: 1,
         })
       }}
       className="p-4 bg-neutral-200 text-[20px]"

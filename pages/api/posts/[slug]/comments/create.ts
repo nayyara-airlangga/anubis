@@ -53,7 +53,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         authorId: payload.id,
         parentId: parentId ?? null,
       },
-      include: { author: true, post: true },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            email: true,
+            createdAt: true,
+          },
+        },
+        post: true,
+      },
     })
     res
       .status(200)
