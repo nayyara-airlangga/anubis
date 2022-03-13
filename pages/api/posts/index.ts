@@ -15,13 +15,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const posts = await prisma.post.findMany({
-      include: { author: true },
       orderBy: [{ publishedAt: "desc" }, { title: "asc" }],
     })
 
     res.status(200).send({
       status: "success",
-      message: "Fetched user successfully",
+      message: "Fetched posts successfully",
       posts,
     })
   } catch (error: any) {

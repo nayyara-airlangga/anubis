@@ -4,9 +4,9 @@ const DevUpdatePage = () => {
   return (
     <button
       onClick={async () => {
-        await axios.put("/api/posts/anjay-mabar", {
-          title: "Mabar Anjay",
-          content: "Widih dah diupdate",
+        await axios.put("/api/posts/anjay-mabar/update", {
+          title: "Rerouted endpoint",
+          content: "Widih dah ganti endpoint",
         })
       }}
       className="p-4 bg-neutral-200 text-[20px]"

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next"
 import nookies from "nookies"
 
 import { prisma } from "@config"
-import { decryptText, slugify, verifyJWT } from "@utils"
+import { decryptText, verifyJWT } from "@utils"
 
 const superUser = process.env.SUPER_USER as string
 const superEmail = process.env.SUPER_EMAIL as string
