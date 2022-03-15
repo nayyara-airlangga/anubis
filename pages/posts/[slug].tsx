@@ -33,7 +33,7 @@ const PostPage = () => {
       }
       fetchPost()
     }
-  }, [router.isReady])
+  }, [router.query])
 
   return (
     <div className="w-full relative my-8">
