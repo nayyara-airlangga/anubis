@@ -41,7 +41,7 @@ const PostCreate = () => {
       console.log(error.response.data.message)
       setLoadStatus(LoadStatus.ERROR)
 
-      if (error.status == 401) {
+      if (error.response.status == 401) {
         router.push("/auth")
       }
     }

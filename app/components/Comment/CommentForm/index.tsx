@@ -32,6 +32,9 @@ const CommentForm = ({ post }: { post: Post }) => {
     } catch (error: any) {
       console.log(error.response.data.message)
       setLoadStatus(LoadStatus.ERROR)
+      if (error.response.status === 401) {
+        router.push("/auth")
+      }
     }
   }
 
