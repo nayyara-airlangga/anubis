@@ -36,7 +36,7 @@ const Navbar = () => {
   }, [showProfileDropdown])
 
   return (
-    <nav className="z-40 w-full flex items-center justify-between my-4">
+    <nav className="dark:bg-[#2f3136] py-4 sticky top-0 z-40 w-full flex items-center justify-between my-4">
       <ul className="flex items-center justify-between space-x-4">
         {NavLinks.map(({ label, path }, index) => (
           <li key={path + index} className="group">
