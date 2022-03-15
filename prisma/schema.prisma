@@ -29,6 +29,7 @@ model User {
 model Post {
     id        Int     @id @default(autoincrement())
     title     String  @db.VarChar(255)
+    headline  String  @db.VarChar(1000)
     slug      String  @unique @db.VarChar(255)
     content   String  @db.Text
     published Boolean @default(false)

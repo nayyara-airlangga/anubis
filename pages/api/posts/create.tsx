@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Permission denied")
     }
 
-    const { title, content, published } = req.body
+    const { title, headline, content, published } = req.body
     const id = payload.id
 
     const posts = await prisma.post.findMany({ where: { title } })
@@ -64,6 +64,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         title,
         slug,
+        headline,
         content,
         published: published ?? false,
         authorId: id,

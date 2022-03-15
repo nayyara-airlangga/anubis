@@ -7,7 +7,7 @@ interface Post {
   slug: string
   content: string
   published: boolean
-  createdat: string
+  createdAt: string
   editedAt: string
   publishedAt?: string
   authorId: number
