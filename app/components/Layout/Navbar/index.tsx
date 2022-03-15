@@ -46,7 +46,9 @@ const Navbar = () => {
                   variant="b3"
                   className={`duration-500 ${
                     router.pathname === path ||
-                    router.pathname.startsWith("/posts")
+                    (router.pathname !== path &&
+                      path.startsWith("/posts") &&
+                      router.pathname.startsWith("/posts"))
                       ? "dark:text-blue-300"
                       : "dark:text-white"
                   } dark:group-hover:text-blue-400`}

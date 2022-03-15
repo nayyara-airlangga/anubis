@@ -4,6 +4,7 @@ import { User } from "../User"
 interface Post {
   id: number
   title: string
+  headline: string
   slug: string
   content: string
   published: boolean

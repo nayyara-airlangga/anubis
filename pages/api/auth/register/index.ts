@@ -57,13 +57,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("User already exists")
     }
 
-    const jwt = createJWT(
-      { username, email, name },
-      jwtSecret,
-      rememberMe ? "30d" : "7d"
-    )
-
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         username,
         email,
@@ -71,6 +65,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         password: hashPassword(password),
       },
     })
+
+    const jwt = createJWT(
+      { id: user.id, username, email, name },
+      jwtSecret,
+      rememberMe ? "30d" : "7d"
+    )
 
     nookies.set({ res }, "jwt", encryptText(jwt, encryptionKey), {
       httpOnly: true,
