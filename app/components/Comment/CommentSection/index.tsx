@@ -30,7 +30,7 @@ const CommentSection = ({ post }: { post: Post }) => {
     }
 
     fetchComments()
-  }, [])
+  }, [post.slug])
 
   return (
     <div className="dark:bg-neutral-700 p-4 my-8 rounded-lg break-words">
