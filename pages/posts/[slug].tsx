@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-import { CommentForm, Heading, PostDetails } from "@components"
+import { CommentForm, CommentSection, Heading, PostDetails } from "@components"
 import { LoadStatus } from "@constants"
 import { Post } from "@models"
 
@@ -64,6 +64,7 @@ const PostPage = () => {
           <PostDetails post={post} />
           <hr className="my-8" />
           <CommentForm post={post} />
+          <CommentSection post={post} />
         </>
       )}
     </div>

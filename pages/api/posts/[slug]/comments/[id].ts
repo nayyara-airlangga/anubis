@@ -71,11 +71,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     ) {
       throw Error("Permission denied")
     }
-    const { comment: newComment } = req.body
+    const { comment: newComment, editedAt } = req.body
 
     const comment = await prisma.comment.update({
       where: { id: Number.parseInt(id as string) },
-      data: { comment: newComment },
+      data: { comment: newComment, editedAt },
       include: {
         author: {
           select: {
