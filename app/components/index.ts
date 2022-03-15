@@ -1,4 +1,5 @@
 export * from "./Auth"
+export * from "./Comment"
 export * from "./Design"
 export * from "./Layout"
 export * from "./Post"

@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-import { Heading, PostDetails } from "@components"
+import { CommentForm, Heading, PostDetails } from "@components"
 import { LoadStatus } from "@constants"
 import { Post } from "@models"
 
@@ -33,7 +33,7 @@ const PostPage = () => {
       }
       fetchPost()
     }
-  }, [router.query])
+  }, [router.query, router.isReady])
 
   return (
     <div className="w-full relative my-8">
@@ -59,7 +59,13 @@ const PostPage = () => {
             : "An error occured"}
         </Heading>
       )}
-      {post && <PostDetails post={post} />}
+      {post && (
+        <>
+          <PostDetails post={post} />
+          <hr className="my-8" />
+          <CommentForm post={post} />
+        </>
+      )}
     </div>
   )
 }

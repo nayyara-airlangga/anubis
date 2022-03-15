@@ -79,7 +79,7 @@ const PostCreate = () => {
         required
       />
       <Button
-        type="submit"
+        type={loadStatus === "LOADING" ? "button" : "submit"}
         className={loadStatus === "LOADING" ? "animate-pulse" : ""}
         isDisabled={
           postData.title.trim().length < 1 ||
