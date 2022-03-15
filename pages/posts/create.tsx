@@ -44,7 +44,7 @@ const CreatePostPage = () => {
   return (
     <div className="w-full relative my-8">
       <Head>
-        <title>Anggans | Create a Post </title>
+        <title>Angga | Create a Post </title>
       </Head>
       <Heading
         variant="h1"

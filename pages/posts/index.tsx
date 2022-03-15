@@ -29,7 +29,7 @@ const PostsPage = () => {
   return (
     <div className="relative w-full">
       <Head>
-        <title>Anggans | Posts</title>
+        <title>Angga | Posts</title>
       </Head>
       <div className="my-16">
         {posts &&

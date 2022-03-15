@@ -39,7 +39,7 @@ const PostPage = () => {
     <div className="w-full relative my-8">
       <Head>
         <title>
-          Anggans |{" "}
+          Angga |{" "}
           {loadStatus === "LOADING"
             ? "Loading..."
             : loadStatus === "SUCCESS"
