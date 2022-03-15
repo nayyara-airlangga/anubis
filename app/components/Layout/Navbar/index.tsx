@@ -8,7 +8,7 @@ const Navbar = () => {
   const router = useRouter()
 
   return (
-    <nav className="w-full flex items-center justify-between my-4 px-4">
+    <nav className="w-full flex items-center justify-between my-4">
       <ul className="flex items-center justify-between space-x-4">
         {NavLinks.map(({ label, path }, index) => (
           <li key={path + index} className="group">
