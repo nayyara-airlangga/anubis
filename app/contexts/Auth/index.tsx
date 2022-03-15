@@ -38,7 +38,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { data } = await axios.get("/api/users/me")
 
-      setUser(data)
+      setUser(data.user)
       setLoadStatus(LoadStatus.SUCCESS)
     } catch (error: any) {
       setUser(undefined)
@@ -90,7 +90,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await axios.post("/api/auth/logout")
     setUser(undefined)
 
-    push("/auth")
+    reload()
   }
 
   return (
