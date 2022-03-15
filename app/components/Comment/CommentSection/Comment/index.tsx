@@ -8,6 +8,7 @@ import { LoadStatus } from "@constants"
 import { useAuth } from "@hooks"
 import { Comment as CommentModel, Post } from "@models"
 
+import DeleteIcon from "@icons/delete.svg"
 import EditIcon from "@icons/edit.svg"
 
 const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
@@ -35,8 +36,31 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
 
     try {
       const { data } = await axios.put(
-        "/api/posts/" + post.slug + "/comments/" + id,
+        "/api/posts/" + post.slug + "/comments/" + id + "/update",
         { comment: newComment.trim(), editedAt: new Date().toISOString() }
+      )
+
+      if (data.status === "success") {
+        setLoadStatus(LoadStatus.SUCCESS)
+        reload()
+      }
+    } catch (error: any) {
+      console.log(error.response.data.message)
+      setLoadStatus(LoadStatus.ERROR)
+      if (error.response.status === 401) {
+        push("/auth")
+      }
+    }
+  }
+
+  const deleteComment = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    setLoadStatus(LoadStatus.LOADING)
+
+    try {
+      const { data } = await axios.delete(
+        "/api/posts/" + post.slug + "/comments/" + id + "/delete"
       )
 
       if (data.status === "success") {
@@ -153,16 +177,28 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
         )}
       </div>
       {user && user.username === username && !editComment && (
-        <Button
-          onClick={() => setEditComment(!editComment)}
-          padding=""
-          bgColor="bg-transparent"
-          hoverBgColor="hover:bg-transparent"
-          clickedBgColor="active:bg-transparent"
-          className="group"
-        >
-          <EditIcon className="duration-500 dark:fill-neutral-500 dark:group-hover:fill-neutral-400 w-4 h-4" />
-        </Button>
+        <div className="flex flex-col gap-8">
+          <Button
+            onClick={deleteComment}
+            padding=""
+            bgColor="bg-transparent"
+            hoverBgColor="hover:bg-transparent"
+            clickedBgColor="active:bg-transparent"
+            className="group"
+          >
+            <DeleteIcon className="duration-500 dark:fill-red-500 dark:group-hover:fill-red-400 w-6 h-6" />
+          </Button>
+          <Button
+            onClick={() => setEditComment(!editComment)}
+            padding=""
+            bgColor="bg-transparent"
+            hoverBgColor="hover:bg-transparent"
+            clickedBgColor="active:bg-transparent"
+            className="group"
+          >
+            <EditIcon className="duration-500 dark:fill-neutral-500 dark:group-hover:fill-neutral-400 w-5 h-5" />
+          </Button>
+        </div>
       )}
     </section>
   )
