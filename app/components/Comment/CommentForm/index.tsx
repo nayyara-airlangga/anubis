@@ -59,7 +59,7 @@ const CommentForm = ({ post }: { post: Post }) => {
         </Button>
       ) : (
         <div className="bg-red-500 dark:text-white p-4 rounded-lg">
-          <Body variant="b3">You need to be logged in to comment</Body>
+          <Body variant="b3">Sign in to comment on this post</Body>
         </div>
       )}
     </form>
