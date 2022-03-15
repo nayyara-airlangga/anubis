@@ -14,9 +14,9 @@ const PostCard = ({ title, createdAt, headline, slug }: PostCardProps) => {
     day: "numeric",
     month: "long",
     year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
   })
 
   return (
@@ -35,7 +35,7 @@ const PostCard = ({ title, createdAt, headline, slug }: PostCardProps) => {
       <Body variant="b3" className="mt-2 dark:text-white">
         {createdDate}
       </Body>
-      <Body variant="b4" className="mt-4 dark:text-white">
+      <Body variant="b4" className="break-words mt-4 dark:text-white">
         {headline}
       </Body>
     </div>
