@@ -23,6 +23,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { username, email, name, password, rememberMe } = req.body
 
+    const usernameRegex = new RegExp(/^[A-Za-z0-9._-]+$/)
+
+    if (!usernameRegex.test(username)) {
+      throw Error(
+        "Username can only contain a-z, A-Z, 0-9, underscores, dots, and dash"
+      )
+    }
+
+    if (username.length < 3 || username.length > 20) {
+      throw Error("Username has to be between 3-20 characters")
+    }
+
     const userWithUsername = await prisma.user.findUnique({
       where: {
         username,
@@ -71,10 +83,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .status(200)
       .send({ status: "success", message: "Registration successful" })
   } catch (error: any) {
-    res.status(error.message === "Method not allowed" ? 405 : 409).send({
-      status: "error",
-      message: error.message,
-    })
+    res
+      .status(
+        error.message === "Method not allowed"
+          ? 405
+          : error.message === "Username has to be between 1-20 characters" ||
+            error.message === "Username contains illegal chararacters"
+          ? 400
+          : 409
+      )
+      .send({
+        status: "error",
+        message: error.message,
+      })
   }
 }
 
