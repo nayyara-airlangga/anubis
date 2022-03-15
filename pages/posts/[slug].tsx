@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
-import { Heading, PostSection } from "@components"
+import { Heading, PostDetails } from "@components"
 import { LoadStatus } from "@constants"
 import { Post } from "@models"
 
@@ -59,7 +59,7 @@ const PostPage = () => {
             : "An error occured"}
         </Heading>
       )}
-      {post && <PostSection post={post} />}
+      {post && <PostDetails post={post} />}
     </div>
   )
 }

@@ -3,7 +3,7 @@ import Markdown from "markdown-to-jsx"
 import { Body, Heading } from "@components"
 import { Post } from "@models"
 
-const PostSection = ({ post }: { post: Post }) => {
+const PostDetails = ({ post }: { post: Post }) => {
   const createdDate = new Date(post.createdAt).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
@@ -33,13 +33,15 @@ const PostSection = ({ post }: { post: Post }) => {
       <Body
         variant="b4"
         size="tablet:text-[16px] text-[14px]"
-        className="mb-4 break-words mt-4 dark:text-white"
+        className="mb-12 break-words mt-4 dark:text-white"
       >
         {post.headline}
       </Body>
-      <Markdown>{post.content}</Markdown>
+      <Markdown className="prose dark:prose-invert prose-a:text-blue-400 prose-code:text-[14px] break-words overflow-x-auto">
+        {post.content}
+      </Markdown>
     </div>
   )
 }
 
-export { PostSection }
+export { PostDetails }

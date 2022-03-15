@@ -1,2 +1,3 @@
 export * from "./PostCard"
-export * from "./PostSection"
+export * from "./PostCreate"
+export * from "./PostDetails"
