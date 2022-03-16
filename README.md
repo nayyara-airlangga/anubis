@@ -38,4 +38,18 @@ docker compose up -d
 
 # Notes
 
-To access the create a post feature, make sure you login/register using an account with the same username and email as `SUPER_USER` and `SUPER_EMAIL` on your `.env` file.
+- The ports for the development environment and the production environment are slightly different. If you'd like to access them from your machine, here are the ports:
+
+```bash
+# Development Ports
+Main app is 3001 (localhost:3001)
+Db is 5433
+Pgadmin is 5055
+
+# Production Ports
+Main app is 3000
+Db is 5432
+Pgadmin is 5050
+```
+
+- To access the create a post feature, make sure you login/register using an account with the same username and email as `SUPER_USER` and `SUPER_EMAIL` on your `.env` file.
