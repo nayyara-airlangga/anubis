@@ -19,7 +19,7 @@ const ProfilePage = () => {
       </Heading>
       <section id="biodata" className="w-full my-8">
         <Body variant="b3" className="dark:text-white mt-8 mb-4">
-          My name$apos;s Nayyara Airlangga Raharjo and I&apos;m a first year
+          My name&apos;s Nayyara Airlangga Raharjo and I&apos;m a first year
           undergraduate Computer Science student. Currently, I am interested in
           the world of web and software development. Lately, I also have a
           growing interest towards ML and AI. I&apos;ve tried my hands on some

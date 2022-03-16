@@ -2,6 +2,7 @@ import { Body, Heading } from "@components"
 import { Experience } from "@models"
 
 const ExperienceCard = ({
+  siteUrl,
   organization,
   position,
   duration,
@@ -10,7 +11,7 @@ const ExperienceCard = ({
   techStack,
 }: Experience) => {
   return (
-    <div className="w-full p-4 dark:bg-neutral-600 rounded-lg">
+    <div className="w-full p-4 dark:bg-neutral-600 my-6 rounded-lg">
       <div className="flex tablet:flex-row flex-col gap-2 items-center">
         <Heading
           variant="h6"
@@ -42,7 +43,7 @@ const ExperienceCard = ({
       >
         {description}
       </Body>
-      <ul className="list-inside list-disc dark:text-white">
+      <ul className="list-inside list-disc dark:text-white mt-1">
         {pointers.map((pointer, index) => (
           <li
             key={pointer + index}
@@ -58,6 +59,22 @@ const ExperienceCard = ({
           </li>
         ))}
       </ul>
+      <Body
+        variant="b4"
+        size="text-[12px] tablet:text-[16px]"
+        className="mt-4 dark:text-white group"
+      >
+        {siteUrl ? (
+          <a
+            href={siteUrl}
+            className="duration-500 text-blue-500 group-hover:text-blue-400"
+          >
+            Site URL
+          </a>
+        ) : (
+          <i>Under development</i>
+        )}
+      </Body>
     </div>
   )
 }
