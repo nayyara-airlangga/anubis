@@ -1,7 +1,7 @@
 import Head from "next/head"
 
-import { Heading, Body, ExperienceCard } from "@components"
-import { Experiences } from "@constants"
+import { Heading, Body, ExperienceCard, ProjectCard } from "@components"
+import { Experiences, Projects } from "@constants"
 
 const ProfilePage = () => {
   return (
@@ -51,6 +51,19 @@ const ProfilePage = () => {
             key={index + experience.description}
             {...experience}
           />
+        ))}
+      </section>
+      <section id="projects" className="w-full my-8">
+        <Heading
+          variant="h2"
+          size="tablet:text-[36px] text-[32px]"
+          weight="bold"
+          className="dark:text-white mb-8"
+        >
+          Projects
+        </Heading>
+        {Projects.map((project, index) => (
+          <ProjectCard key={index + project.description} {...project} />
         ))}
       </section>
     </div>

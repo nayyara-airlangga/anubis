@@ -69,7 +69,7 @@ const ExperienceCard = ({
             href={siteUrl}
             className="duration-500 text-blue-500 group-hover:text-blue-400"
           >
-            Site URL
+            Link to Site
           </a>
         ) : (
           <i>Under development</i>
