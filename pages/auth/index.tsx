@@ -21,7 +21,7 @@ const AuthPage = () => {
   return (
     <div className="relative w-screen h-screen">
       <Head>
-        <title>Snippets | Auth</title>
+        <title>Angga | Auth</title>
       </Head>
       <AuthFormProvider>
         <AuthForm />
