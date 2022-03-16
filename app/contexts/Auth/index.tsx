@@ -56,7 +56,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       switch (data.status) {
         case "success":
-          push("/")
+          reload()
           return { status: LoadStatus.SUCCESS, message: data.message }
 
         default:
