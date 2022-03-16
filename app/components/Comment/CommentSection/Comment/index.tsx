@@ -170,7 +170,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
         ) : (
           <Markdown
             options={{ forceBlock: true }}
-            className="mt-4 prose dark:prose-invert tablet:text-[14px] text-[12px]"
+            className="max-w-full w-full mt-4 prose dark:prose-invert tablet:text-[14px] text-[12px]"
           >
             {text}
           </Markdown>
