@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.dev
-    container_name: postwrite-app-dev
+    container_name: personal-site-dev
     deploy:
       restart_policy:
         condition: on-failure
@@ -28,7 +28,7 @@ services:
 
   db_dev:
     image: postgres
-    container_name: postwrite-db-dev
+    container_name: personal-site-db-dev
     deploy:
       restart_policy:
         condition: on-failure
@@ -47,7 +47,7 @@ services:
 
   pgadmin_dev:
     image: dpage/pgadmin4
-    container_name: postwrite-pgadmin-dev
+    container_name: personal-site-pgadmin-dev
     restart: always
     deploy:
       restart_policy:
