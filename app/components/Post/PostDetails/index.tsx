@@ -55,7 +55,7 @@ const PostDetails = ({ post }: { post: Post }) => {
       >
         {post.headline}
       </Body>
-      <Markdown className="max-w-full w-full prose dark:prose-invert tablet:prose-img:w-3/5 prose-img:w-full prose-img:my-0 prose-img:mx-auto prose-a:text-blue-400 prose-code:text-[14px] break-words overflow-x-auto">
+      <Markdown className="max-w-full w-full prose dark:prose-invert desktop:prose-img:w-3/5 prose-img:w-full prose-img:my-0 prose-img:mx-auto prose-a:text-blue-400 prose-code:text-[14px] break-words overflow-x-auto">
         {post.content}
       </Markdown>
     </div>
