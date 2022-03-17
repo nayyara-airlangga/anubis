@@ -76,6 +76,24 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
     }
   }
 
+  const createdDate = new Date(createdAt).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+
+  const editedDate = new Date(editedAt).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+
   return (
     <section
       id={`comment-${id}`}
@@ -96,24 +114,17 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
           size="text-[10px] tablet:text-[14px]"
           className="dark:text-white"
         >
-          {editedAt !== createdAt
-            ? `Edited at ${new Date(editedAt).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}`
-            : new Date(createdAt).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}
+          {createdDate}
         </Body>
+        {editedAt !== createdAt && (
+          <Body
+            variant="b4"
+            size="text-[10px] tablet:text-[14px]"
+            className="dark:text-white"
+          >
+            <i>Edited at {editedDate}</i>
+          </Body>
+        )}
         {editComment ? (
           <form onSubmit={updateComment}>
             <InputField
