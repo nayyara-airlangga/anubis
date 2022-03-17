@@ -86,7 +86,7 @@ const PostUpdatePage = () => {
             ? "Loading..."
             : loadStatus === "SUCCESS"
             ? "Update a Post"
-            : "Error"}{" "}
+            : "Error"}
         </title>
       </Head>
       <Heading
@@ -99,7 +99,9 @@ const PostUpdatePage = () => {
           ? "Loading..."
           : loadStatus === "SUCCESS"
           ? "Update this post"
-          : "An error occured"}
+          : post
+          ? "An error occured"
+          : "Post not found"}
       </Heading>
       {loadStatus === "SUCCESS" && <PostCreate post={post} />}
     </div>
