@@ -42,6 +42,7 @@ const PostCard = ({
           <Heading
             variant="h3"
             size="tablet:text-[32px] text-[28px]"
+            weight="bold"
             className="duration-300 dark:text-blue-400 dark:hover:text-blue-500"
           >
             {title}
