@@ -33,13 +33,14 @@ const PostsPage = () => {
       </Head>
       <div className="my-16">
         {posts &&
-          posts.map(({ title, slug, headline, createdAt }, index) => (
+          posts.map(({ title, slug, headline, createdAt, editedAt }, index) => (
             <PostCard
               key={slug + index}
               title={title}
               slug={slug}
               headline={headline}
               createdAt={createdAt}
+              editedAt={editedAt}
             />
           ))}
       </div>

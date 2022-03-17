@@ -13,6 +13,15 @@ const PostDetails = ({ post }: { post: Post }) => {
     hour12: false,
   })
 
+  const editedDate = new Date(post.editedAt).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+
   return (
     <div>
       <Heading
@@ -21,7 +30,7 @@ const PostDetails = ({ post }: { post: Post }) => {
         weight="bold"
         className="dark:text-white"
       >
-        {post && post.title}
+        {post.title}
       </Heading>
       <Body
         variant="b2"
@@ -30,6 +39,15 @@ const PostDetails = ({ post }: { post: Post }) => {
       >
         {createdDate}
       </Body>
+      {editedDate !== createdDate && (
+        <Body
+          variant="b3"
+          size="text-[14px] tablet:text-[16px]"
+          className="mt-1 dark:text-white"
+        >
+          <i>Edited at {editedDate}</i>
+        </Body>
+      )}
       <Body
         variant="b4"
         size="tablet:text-[16px] text-[14px]"

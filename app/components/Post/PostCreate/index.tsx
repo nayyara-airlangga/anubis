@@ -4,12 +4,13 @@ import { useState } from "react"
 
 import { Body, Button, InputField } from "@components"
 import { LoadStatus } from "@constants"
+import { Post } from "@models"
 
-const PostCreate = () => {
+const PostCreate = ({ post }: { post?: Post }) => {
   const [postData, setPostData] = useState({
-    title: "",
-    headline: "",
-    content: "",
+    title: post ? post.title : "",
+    headline: post ? post.headline : "",
+    content: post ? post.content : "",
   })
 
   const router = useRouter()
@@ -30,7 +31,12 @@ const PostCreate = () => {
     setLoadStatus(LoadStatus.LOADING)
 
     try {
-      const { data } = await axios.post("/api/posts/create", postData)
+      const { data } = post
+        ? await axios.put("/api/posts/" + post.slug + "/update", {
+            ...postData,
+            editedAt: new Date().toISOString(),
+          })
+        : await axios.post("/api/posts/create", postData)
 
       if (data.status === "success") {
         setLoadStatus(LoadStatus.SUCCESS)
@@ -88,7 +94,11 @@ const PostCreate = () => {
         }
       >
         <Body variant="b3">
-          {loadStatus === "LOADING" ? "Loading..." : "Create Post"}
+          {loadStatus === "LOADING"
+            ? "Loading..."
+            : post
+            ? "Update Post"
+            : "Create Post"}
         </Body>
       </Button>
     </form>

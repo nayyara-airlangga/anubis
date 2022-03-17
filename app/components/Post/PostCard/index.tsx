@@ -5,12 +5,28 @@ import { Body, Heading } from "@components"
 interface PostCardProps {
   title: string
   createdAt: string
+  editedAt: string
   headline: string
   slug: string
 }
 
-const PostCard = ({ title, createdAt, headline, slug }: PostCardProps) => {
+const PostCard = ({
+  title,
+  createdAt,
+  editedAt,
+  headline,
+  slug,
+}: PostCardProps) => {
   const createdDate = new Date(createdAt).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+
+  const editedDate = new Date(editedAt).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -35,6 +51,11 @@ const PostCard = ({ title, createdAt, headline, slug }: PostCardProps) => {
       <Body variant="b3" className="mt-2 dark:text-white">
         {createdDate}
       </Body>
+      {editedAt !== createdAt && (
+        <Body variant="b4" className="mt-1 dark:text-white">
+          <i>Edited at {editedDate}</i>
+        </Body>
+      )}
       <Body variant="b4" className="break-words mt-4 dark:text-white">
         {headline}
       </Body>

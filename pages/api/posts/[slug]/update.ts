@@ -53,7 +53,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Post not found")
     }
 
-    const { title, headline, content, published } = req.body
+    const { title, headline, content, published, editedAt } = req.body
 
     const post = await prisma.post.update({
       where: { slug: slug as string },
@@ -61,7 +61,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         title,
         headline,
         content,
-        published,
+        published: published ?? false,
+        editedAt: editedAt ?? postToEdit.createdAt,
       },
     })
 
