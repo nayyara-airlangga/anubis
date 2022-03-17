@@ -39,11 +39,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Password needs to be 6-16 characters long")
     }
 
-    const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])$/)
+    const passwordRegex = new RegExp(
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$/
+    )
 
     if (!passwordRegex.test(password)) {
       throw Error(
-        "Password needs to contain at least one numeric digit, one uppercase and one lowercase letter"
+        "Password needs to contain at least 1 digit, 1 uppercase and 1 lowercase letter, and 1 special character"
       )
     }
 
@@ -103,7 +105,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             error.message === "Username contains illegal chararacters" ||
             error.message === "Password needs to be 6-16 characters long" ||
             error.message ===
-              "Password needs to contain at least one numeric digit, one uppercase and one lowercase letter"
+              "Password needs to contain at least 1 digit, 1 uppercase and 1 lowercase letter, and 1 special character"
           ? 400
           : 409
       )
