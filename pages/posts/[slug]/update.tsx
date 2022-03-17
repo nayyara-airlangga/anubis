@@ -75,7 +75,7 @@ const PostUpdatePage = () => {
       }
       fetchPost()
     }
-  }, [router.query, router.isReady])
+  }, [router, router.query, router.isReady])
 
   return (
     <div className="w-full relative my-8">
