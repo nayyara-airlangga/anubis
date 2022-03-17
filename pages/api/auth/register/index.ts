@@ -35,6 +35,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Username has to be between 3-20 characters")
     }
 
+    if (password.length < 6 || password > 16) {
+      throw Error("Password needs to be 6-16 characters long")
+    }
+
+    const passwordRegex = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])$/)
+
+    if (!passwordRegex.test(password)) {
+      throw Error(
+        "Password needs to contain at least one numeric digit, one uppercase and one lowercase letter"
+      )
+    }
+
     const userWithUsername = await prisma.user.findUnique({
       where: {
         username,
@@ -88,7 +100,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         error.message === "Method not allowed"
           ? 405
           : error.message === "Username has to be between 1-20 characters" ||
-            error.message === "Username contains illegal chararacters"
+            error.message === "Username contains illegal chararacters" ||
+            error.message === "Password needs to be 6-16 characters long" ||
+            error.message ===
+              "Password needs to contain at least one numeric digit, one uppercase and one lowercase letter"
           ? 400
           : 409
       )
