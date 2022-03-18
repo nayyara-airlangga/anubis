@@ -10,6 +10,8 @@ import { Post } from "@models"
 const PostPage = () => {
   const router = useRouter()
 
+  const [statusCode, setStatusCode] = useState<number>()
+
   const [post, setPost] = useState<Post>()
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(LoadStatus.LOADING)
 
@@ -18,17 +20,22 @@ const PostPage = () => {
       const { slug } = router.query
       const fetchPost = async () => {
         try {
-          const { data } = await axios.get(("/api/posts/" + slug) as string)
+          const { data, status } = await axios.get(
+            ("/api/posts/" + slug) as string
+          )
 
           if (data.status === "success") {
             setPost(data.post)
             setLoadStatus(LoadStatus.SUCCESS)
+            setStatusCode(status)
           } else {
             setLoadStatus(LoadStatus.ERROR)
           }
         } catch (error: any) {
           setLoadStatus(LoadStatus.ERROR)
           console.log(error.response.data.message)
+
+          setStatusCode(error.response.status)
         }
       }
       fetchPost()
@@ -56,6 +63,8 @@ const PostPage = () => {
         >
           {loadStatus === LoadStatus.LOADING
             ? "Loading..."
+            : statusCode === 404
+            ? "Post not found"
             : "An error occured"}
         </Heading>
       )}
