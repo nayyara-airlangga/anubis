@@ -3,6 +3,7 @@ import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
+import { EditCommentForm } from "../EditCommentForm"
 import { ReplyForm } from "../ReplyForm"
 import { Body, Button } from "@components"
 import { useAuth } from "@hooks"
@@ -10,7 +11,6 @@ import { Comment as CommentModel, Post } from "@models"
 
 import DeleteIcon from "@icons/delete.svg"
 import EditIcon from "@icons/edit.svg"
-import { EditCommentForm } from "../EditCommentForm"
 
 const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   const {
@@ -26,6 +26,11 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   const { user } = useAuth()
 
   const [editComment, setEditComment] = useState(false)
+  const [showReplies, setShowReplies] = useState(false)
+
+  const [replies, setReplies] = useState<CommentModel[]>()
+  const [lastReplyId, setLastReplyId] = useState<number>()
+  const [hasNextPage, setHasNextPage] = useState(false)
 
   const deleteComment = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
@@ -43,6 +48,31 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
       if (error.response.status === 401) {
         push("/auth")
       }
+    }
+  }
+
+  const fetchReplies = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      const { data } = await axios.get(
+        "/api/posts/" +
+          post.slug +
+          "/comments/" +
+          comment.id +
+          "/replies?" +
+          (lastReplyId ? "lastId=" + lastReplyId : "")
+      )
+
+      if (data.status === "success") {
+        if (!replies) {
+          setReplies(data.replies)
+        } else {
+          setReplies(replies.concat(...data.replies))
+        }
+        setLastReplyId(data.lastReplyId)
+        setHasNextPage(data.hasNextPage)
+      }
+    } catch (error: any) {
+      console.log(error.response.data.message)
     }
   }
 
@@ -75,7 +105,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
           size="mt-0.5 text-[12px] tablet:text-[14px]"
           className="dark:text-neutral-400"
         >
-          {createdDate} ({editedAt !== createdAt && "Edited"})
+          {createdDate} {editedAt !== createdAt && "(Edited)"}
         </Body>
 
         {editComment ? (
@@ -95,8 +125,64 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
             {user && <ReplyForm comment={comment} post={post} />}
           </div>
         )}
+        {!comment.parentId && (
+          <Button
+            onClick={async (event) => {
+              setShowReplies(!showReplies)
+
+              if (!replies) {
+                await fetchReplies(event)
+              }
+            }}
+            padding="tablet:pt-2"
+            bgColor="bg-transparent"
+            hoverBgColor="hover:bg-transparent"
+            clickedBgColor="active:bg-transparent"
+            className="my-2 group"
+          >
+            <Body
+              variant="b3"
+              size="text-[14px] tablet:text-[16px]"
+              className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+            >
+              {showReplies ? "Hide replies" : "Show replies"}
+            </Body>
+          </Button>
+        )}
+        <div className="flex flex-col w-full">
+          {showReplies &&
+            replies &&
+            replies.map((reply, index) => (
+              <div
+                key={index + comment.comment}
+                className="border-l-2 dark:border-neutral-500 pl-2.5 py-2 w-full"
+              >
+                <Comment comment={reply} post={post} />
+              </div>
+            ))}
+          {hasNextPage && (
+            <Button
+              onClick={fetchReplies}
+              padding="pt-4"
+              bgColor="bg-transparent"
+              hoverBgColor="hover:bg-transparent"
+              clickedBgColor="active:bg-transparent"
+              className="my-2 group w-full"
+            >
+              <Body
+                variant="b3"
+                size="text-[14px] tablet:text-[16px]"
+                className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+              >
+                Show more replies
+              </Body>
+            </Button>
+          )}
+        </div>
       </div>
-      {user && user.username === username && !editComment && (
+
+      {/* Edit and delete section */}
+      {!showReplies && user && user.username === username && !editComment && (
         <div className="flex flex-col gap-8">
           <Button
             onClick={deleteComment}

@@ -24,7 +24,7 @@ const ReplyForm = ({ comment, post }: { comment: Comment; post: Post }) => {
         "/api/posts/" +
           post.slug +
           "/comments/" +
-          comment.id +
+          (comment.parentId ? comment.parentId : comment.id) +
           "/replies/create",
         { comment: reply.trim() }
       )
@@ -54,7 +54,11 @@ const ReplyForm = ({ comment, post }: { comment: Comment; post: Post }) => {
       <Body
         variant="b3"
         size="text-[14px] tablet:text-[16px]"
-        className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+        className={
+          comment.parentId
+            ? "dark:text-neutral-400 dark:group-hover:underline"
+            : "text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+        }
       >
         Reply
       </Body>

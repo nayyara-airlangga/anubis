@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Method not allowed")
     }
 
-    const { slug } = req.query
+    const { slug, replies } = req.query
 
     const postOfTheComments = await prisma.post.findUnique({
       where: { slug: slug as string },
@@ -24,21 +24,41 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       throw Error("Post not found")
     }
 
-    const comments = await prisma.comment.findMany({
-      orderBy: [{ createdAt: "desc" }, { editedAt: "desc" }],
-      where: { post: { slug: slug as string }, parentId: null },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            email: true,
-            createdAt: true,
+    let comments
+
+    if (replies === "true") {
+      comments = await prisma.comment.findMany({
+        orderBy: [{ createdAt: "desc" }, { editedAt: "desc" }],
+        where: { post: { slug: slug as string } },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              email: true,
+              createdAt: true,
+            },
           },
         },
-      },
-    })
+      })
+    } else {
+      comments = await prisma.comment.findMany({
+        orderBy: [{ createdAt: "desc" }, { editedAt: "desc" }],
+        where: { post: { slug: slug as string }, parentId: null },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              email: true,
+              createdAt: true,
+            },
+          },
+        },
+      })
+    }
 
     res.status(200).send({
       status: "success",

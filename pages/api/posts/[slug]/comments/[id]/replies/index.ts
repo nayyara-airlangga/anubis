@@ -37,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (!lastId) {
       replies = await prisma.comment.findMany({
-        take: 10,
+        take: 5,
         where: { parentId: Number.parseInt(id as string) },
         orderBy: [{ createdAt: "desc" }, { editedAt: "desc" }],
         include: {
@@ -55,7 +55,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       replies = await prisma.comment.findMany({
         skip: 1,
-        take: 10,
+        take: 5,
         cursor: { id: Number.parseInt(lastId as string) },
         where: { parentId: Number.parseInt(id as string) },
         orderBy: [{ createdAt: "desc" }, { editedAt: "desc" }],
