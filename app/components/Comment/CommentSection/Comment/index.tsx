@@ -3,6 +3,7 @@ import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
+import { ReplyForm } from "../ReplyForm"
 import { Body, Button, InputField } from "@components"
 import { LoadStatus } from "@constants"
 import { useAuth } from "@hooks"
@@ -10,6 +11,7 @@ import { Comment as CommentModel, Post } from "@models"
 
 import DeleteIcon from "@icons/delete.svg"
 import EditIcon from "@icons/edit.svg"
+import { EditCommentForm } from "../EditCommentForm"
 
 const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   const {
@@ -20,43 +22,14 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
     editedAt,
   } = comment
 
-  const { user } = useAuth()
-
   const { reload, push } = useRouter()
 
-  const [newComment, setNewComment] = useState(text)
+  const { user } = useAuth()
+
   const [editComment, setEditComment] = useState(false)
-
-  const [loadStatus, setLoadStatus] = useState<LoadStatus>(LoadStatus.SUCCESS)
-
-  const updateComment = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    setLoadStatus(LoadStatus.LOADING)
-
-    try {
-      const { data } = await axios.put(
-        "/api/posts/" + post.slug + "/comments/" + id + "/update",
-        { comment: newComment.trim(), editedAt: new Date().toISOString() }
-      )
-
-      if (data.status === "success") {
-        setLoadStatus(LoadStatus.SUCCESS)
-        reload()
-      }
-    } catch (error: any) {
-      console.log(error.response.data.message)
-      setLoadStatus(LoadStatus.ERROR)
-      if (error.response.status === 401) {
-        push("/auth")
-      }
-    }
-  }
 
   const deleteComment = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-
-    setLoadStatus(LoadStatus.LOADING)
 
     try {
       const { data } = await axios.delete(
@@ -64,12 +37,10 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
       )
 
       if (data.status === "success") {
-        setLoadStatus(LoadStatus.SUCCESS)
         reload()
       }
     } catch (error: any) {
       console.log(error.response.data.message)
-      setLoadStatus(LoadStatus.ERROR)
       if (error.response.status === 401) {
         push("/auth")
       }
@@ -88,7 +59,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   return (
     <section
       id={`comment-${id}`}
-      className="mb-4 flex space-x-4 justify-between items-start break-words"
+      className="mb-2 flex space-x-4 justify-between items-start break-words"
     >
       <div className="w-full">
         <Body
@@ -109,65 +80,21 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
         </Body>
 
         {editComment ? (
-          <form onSubmit={updateComment}>
-            <InputField
-              padding="px-2"
-              type="textarea"
-              className="mt-4 tablet:text-[14px] text-[12px]"
-              rows={6}
-              name="comment"
-              value={newComment}
-              onChange={(event) => setNewComment(event.target.value)}
-            />
-            {loadStatus === "ERROR" && (
-              <Body
-                variant="b3"
-                size="text-[12px] tablet:text-[14px]"
-                className="relative -mt-4 text-red-500"
-              >
-                An error occured
-              </Body>
-            )}
-            <div className="flex justify-end items-center gap-4">
-              <Button
-                onClick={() => {
-                  setEditComment(false)
-                  setNewComment(text)
-                }}
-                padding="py-2 px-2"
-                bgColor="bg-transparent"
-                hoverBgColor="hover:bg-transparent"
-                clickedBgColor="active:bg-transparent"
-                className="relative -mt-2 group"
-              >
-                <Body
-                  variant="b3"
-                  size="text-[12px] tablet:text-[14px]"
-                  className="text-red-500 group-hover:text-red-400 group-active:text-red-300"
-                >
-                  Cancel
-                </Body>
-              </Button>
-              <Button
-                padding="px-2 py-2"
-                className={`relative -mt-2 ${
-                  loadStatus === "LOADING" && "animate-pulse"
-                }`}
-                type={loadStatus === "LOADING" ? "button" : "submit"}
-              >
-                <Body variant="b3" size="text-[12px] tablet:text-[14px]">
-                  {loadStatus === "LOADING" ? "Loading..." : "Edit comment"}
-                </Body>
-              </Button>
-            </div>
-          </form>
+          <EditCommentForm
+            comment={comment}
+            post={post}
+            setEditComment={setEditComment}
+          />
         ) : (
-          <Markdown
-            options={{ forceBlock: true }}
-            className="max-w-full w-full mt-4 prose dark:prose-invert tablet:text-[14px] text-[12px]"
-          >
-            {text}
-          </Markdown>
+          <div className="w-full">
+            <Markdown
+              options={{ forceBlock: true }}
+              className="max-w-full w-full mt-4 prose dark:prose-invert tablet:text-[14px] text-[12px]"
+            >
+              {text}
+            </Markdown>
+            {user && <ReplyForm />}
+          </div>
         )}
       </div>
       {user && user.username === username && !editComment && (
