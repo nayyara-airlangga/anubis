@@ -1,13 +1,12 @@
+import axios from "axios"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
 import { Body, Button, InputField } from "@components"
 import { LoadStatus } from "@constants"
-import { useAuth } from "@hooks"
+import { Comment, Post } from "@models"
 
-const ReplyForm = () => {
-  const { user } = useAuth()
-
+const ReplyForm = ({ comment, post }: { comment: Comment; post: Post }) => {
   const { reload, push } = useRouter()
 
   const [replyToComment, setReplyToComment] = useState(false)
@@ -15,7 +14,33 @@ const ReplyForm = () => {
 
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(LoadStatus.SUCCESS)
 
-  const submitReply = async (event: React.FormEvent<HTMLFormElement>) => {}
+  const submitReply = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    setLoadStatus(LoadStatus.LOADING)
+
+    try {
+      const { data } = await axios.post(
+        "/api/posts/" +
+          post.slug +
+          "/comments/" +
+          comment.id +
+          "/replies/create",
+        { comment: reply.trim() }
+      )
+
+      if (data.status === "success") {
+        setLoadStatus(LoadStatus.SUCCESS)
+        reload()
+      }
+    } catch (error: any) {
+      console.log(error.response.data.message)
+      setLoadStatus(LoadStatus.ERROR)
+      if (error.response.status === 401) {
+        push("/auth")
+      }
+    }
+  }
 
   return !replyToComment ? (
     <Button
@@ -75,6 +100,7 @@ const ReplyForm = () => {
           </Body>
         </Button>
         <Button
+          isDisabled={reply.trim().length < 1}
           padding="px-2 py-2"
           className={`relative -mt-2 ${
             loadStatus === "LOADING" && "animate-pulse"

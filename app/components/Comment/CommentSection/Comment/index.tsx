@@ -4,8 +4,7 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 
 import { ReplyForm } from "../ReplyForm"
-import { Body, Button, InputField } from "@components"
-import { LoadStatus } from "@constants"
+import { Body, Button } from "@components"
 import { useAuth } from "@hooks"
 import { Comment as CommentModel, Post } from "@models"
 
@@ -93,7 +92,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
             >
               {text}
             </Markdown>
-            {user && <ReplyForm />}
+            {user && <ReplyForm comment={comment} post={post} />}
           </div>
         )}
       </div>
