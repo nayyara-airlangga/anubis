@@ -10,7 +10,7 @@ const PostDetails = ({ post }: { post: Post }) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
   })
 
   const editedDate = new Date(post.editedAt).toLocaleDateString("en-US", {
@@ -19,7 +19,7 @@ const PostDetails = ({ post }: { post: Post }) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
   })
 
   return (
