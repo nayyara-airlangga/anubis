@@ -79,7 +79,9 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   }
 
   useEffect(() => {
-    fetchReplies()
+    if (!comment.parentId) {
+      fetchReplies()
+    }
   }, [])
 
   const createdDate = new Date(createdAt).toLocaleDateString("en-US", {
