@@ -1,7 +1,7 @@
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { EditCommentForm } from "../EditCommentForm"
 import { ReplyForm } from "../ReplyForm"
@@ -28,6 +28,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   const [editComment, setEditComment] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
 
+  const [totalReplies, setTotalReplies] = useState<number>(0)
   const [replies, setReplies] = useState<CommentModel[]>()
   const [lastReplyId, setLastReplyId] = useState<number>()
   const [hasNextPage, setHasNextPage] = useState(false)
@@ -51,7 +52,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
     }
   }
 
-  const fetchReplies = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const fetchReplies = async () => {
     try {
       const { data } = await axios.get(
         "/api/posts/" +
@@ -68,6 +69,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
         } else {
           setReplies(replies.concat(...data.replies))
         }
+        setTotalReplies(data.total)
         setLastReplyId(data.lastReplyId)
         setHasNextPage(data.hasNextPage)
       }
@@ -76,13 +78,17 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
     }
   }
 
+  useEffect(() => {
+    fetchReplies()
+  }, [])
+
   const createdDate = new Date(createdAt).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
   })
 
   return (
@@ -125,13 +131,13 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
             {user && <ReplyForm comment={comment} post={post} />}
           </div>
         )}
-        {!comment.parentId && (
+        {totalReplies !== 0 && !comment.parentId && (
           <Button
-            onClick={async (event) => {
+            onClick={async () => {
               setShowReplies(!showReplies)
 
               if (!replies) {
-                await fetchReplies(event)
+                await fetchReplies()
               }
             }}
             padding="tablet:pt-2"
@@ -145,7 +151,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
               size="text-[14px] tablet:text-[16px]"
               className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
             >
-              {showReplies ? "Hide replies" : "Show replies"}
+              {showReplies ? "Hide replies" : `Show ${totalReplies} replies`}
             </Body>
           </Button>
         )}
@@ -160,7 +166,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
                 <Comment comment={reply} post={post} />
               </div>
             ))}
-          {hasNextPage && (
+          {showReplies && hasNextPage && (
             <Button
               onClick={fetchReplies}
               padding="pt-4"
