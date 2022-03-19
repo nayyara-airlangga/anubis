@@ -98,11 +98,11 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
           className="dark:text-white"
         >
           {name}&nbsp;&nbsp;
-          <span className="dark:text-neutral-400 font-normal">{`@${username}`}</span>
+          <span className="dark:text-neutral-500 font-normal">{`@${username}`}</span>
         </Body>
         <Body
           variant="b4"
-          size="mt-0.5 text-[10px] tablet:text-[12px]"
+          size="mt-0.5 text-[12px] tablet:text-[14px]"
           className="dark:text-neutral-400"
         >
           {createdDate} ({editedAt !== createdAt && "Edited"})

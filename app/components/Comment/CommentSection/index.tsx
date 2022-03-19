@@ -33,7 +33,7 @@ const CommentSection = ({ post }: { post: Post }) => {
   }, [post.slug])
 
   return (
-    <div className="dark:bg-neutral-700 p-4 my-8 rounded-lg break-words">
+    <div className="dark:bg-neutral-800 p-4 my-8 rounded-lg break-words">
       <Heading
         variant="h6"
         size="text-[14px] tablet:text-[16px]"
