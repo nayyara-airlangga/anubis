@@ -14,7 +14,7 @@ const PostsPage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data, status } = await axios.get("/api/posts")
+        const { data } = await axios.get("/api/posts")
 
         if (data.status === "success") {
           setPosts(data.posts)
@@ -57,15 +57,8 @@ const PostsPage = () => {
           </Heading>
         )}
         {posts &&
-          posts.map(({ title, slug, headline, createdAt, editedAt }, index) => (
-            <PostCard
-              key={slug + index}
-              title={title}
-              slug={slug}
-              headline={headline}
-              createdAt={createdAt}
-              editedAt={editedAt}
-            />
+          posts.map((post, index) => (
+            <PostCard key={post.slug + index} post={post} />
           ))}
       </div>
     </div>
