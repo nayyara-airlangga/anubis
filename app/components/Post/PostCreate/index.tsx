@@ -59,7 +59,6 @@ const PostCreate = ({ post }: { post?: Post }) => {
         type="text"
         name="title"
         label="Title"
-        errorMessage="This is a required field"
         value={postData.title}
         onChange={postDataChangeHandler}
         required
@@ -69,7 +68,6 @@ const PostCreate = ({ post }: { post?: Post }) => {
         rows={6}
         name="headline"
         label="Headline"
-        errorMessage="This is a required field"
         value={postData.headline}
         onChange={postDataChangeHandler}
         required
@@ -79,7 +77,6 @@ const PostCreate = ({ post }: { post?: Post }) => {
         rows={14}
         name="content"
         label="Content"
-        errorMessage="This is a required field"
         value={postData.content}
         onChange={postDataChangeHandler}
         required
