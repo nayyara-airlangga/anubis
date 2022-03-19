@@ -25,8 +25,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const comments = await prisma.comment.findMany({
-      orderBy: [{ editedAt: "desc" }, { createdAt: "desc" }],
-      where: { post: { slug: slug as string } },
+      orderBy: [{ createdAt: "desc" }, { editedAt: "desc" }],
+      where: { post: { slug: slug as string }, parentId: null },
       include: {
         author: {
           select: {
@@ -35,19 +35,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             username: true,
             email: true,
             createdAt: true,
-          },
-        },
-        replies: {
-          include: {
-            author: {
-              select: {
-                id: true,
-                name: true,
-                username: true,
-                email: true,
-                createdAt: true,
-              },
-            },
           },
         },
       },
