@@ -25,6 +25,7 @@
   h6,
   p,
   textarea,
+  span,
   input[type="text"] {
     user-select: text;
     -moz-user-select: text;

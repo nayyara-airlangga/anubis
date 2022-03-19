@@ -69,8 +69,8 @@ const PostCard = ({ post }: { post: Post }) => {
           {createdDate}
         </Body>
         {editedAt !== createdAt && (
-          <Body variant="b4" className="mt-1 dark:text-white">
-            <i>Edited at {editedDate}</i>
+          <Body variant="b4" className="mt-1 dark:text-neutral-400">
+            (Edited at {editedDate})
           </Body>
         )}
         <Body variant="b4" className="break-words mt-4 dark:text-white">

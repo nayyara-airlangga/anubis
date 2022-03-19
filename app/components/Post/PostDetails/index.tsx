@@ -43,9 +43,9 @@ const PostDetails = ({ post }: { post: Post }) => {
         <Body
           variant="b3"
           size="text-[14px] tablet:text-[16px]"
-          className="mt-1 dark:text-white"
+          className="mt-1 dark:text-neutral-400"
         >
-          <i>Edited at {editedDate}</i>
+          (Edited at {editedDate})
         </Body>
       )}
       <Body
