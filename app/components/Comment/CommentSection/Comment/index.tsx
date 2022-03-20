@@ -33,6 +33,8 @@ const Comment = ({
 
   const { user } = useAuth()
 
+  const [readMore, setReadMore] = useState(false)
+
   const [editComment, setEditComment] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
 
@@ -128,8 +130,30 @@ const Comment = ({
               options={{ forceBlock: true }}
               className="max-w-full w-full mt-4 prose dark:prose-invert tablet:text-[14px] text-[12px]"
             >
-              {text}
+              {text.length <= 300
+                ? text
+                : readMore
+                ? text
+                : text.slice(0, 300) + "..."}
             </Markdown>
+            {text.length > 300 && (
+              <Button
+                onClick={() => setReadMore(!readMore)}
+                padding="pt-2"
+                bgColor="bg-transparent"
+                hoverBgColor="hover:bg-transparent"
+                clickedBgColor="active:bg-transparent"
+                className="group"
+              >
+                <Body
+                  variant="b3"
+                  size="text-[12px] tablet:text-[14px]"
+                  className="dark:text-neutral-400 dark:group-hover:underline"
+                >
+                  {readMore ? "Show less" : "Read more"}
+                </Body>
+              </Button>
+            )}
             {user && <ReplyForm comment={comment} post={post} />}
           </div>
         )}
@@ -194,30 +218,34 @@ const Comment = ({
       </div>
 
       {/* Edit and delete section */}
-      {!showReplies && user && user.username === username && !editComment && (
-        <div className="flex flex-col gap-8">
-          <Button
-            onClick={deleteComment}
-            padding=""
-            bgColor="bg-transparent"
-            hoverBgColor="hover:bg-transparent"
-            clickedBgColor="active:bg-transparent"
-            className="group"
-          >
-            <DeleteIcon className="duration-500 dark:fill-red-500 dark:group-hover:fill-red-400 w-6 h-6" />
-          </Button>
-          <Button
-            onClick={() => setEditComment(!editComment)}
-            padding=""
-            bgColor="bg-transparent"
-            hoverBgColor="hover:bg-transparent"
-            clickedBgColor="active:bg-transparent"
-            className="group"
-          >
-            <EditIcon className="duration-500 dark:fill-neutral-500 dark:group-hover:fill-neutral-400 w-5 h-5" />
-          </Button>
-        </div>
-      )}
+      {!readMore &&
+        !showReplies &&
+        user &&
+        user.username === username &&
+        !editComment && (
+          <div className="flex flex-col gap-8">
+            <Button
+              onClick={deleteComment}
+              padding=""
+              bgColor="bg-transparent"
+              hoverBgColor="hover:bg-transparent"
+              clickedBgColor="active:bg-transparent"
+              className="group"
+            >
+              <DeleteIcon className="duration-500 dark:fill-red-500 dark:group-hover:fill-red-400 w-6 h-6" />
+            </Button>
+            <Button
+              onClick={() => setEditComment(!editComment)}
+              padding=""
+              bgColor="bg-transparent"
+              hoverBgColor="hover:bg-transparent"
+              clickedBgColor="active:bg-transparent"
+              className="group"
+            >
+              <EditIcon className="duration-500 dark:fill-neutral-500 dark:group-hover:fill-neutral-400 w-5 h-5" />
+            </Button>
+          </div>
+        )}
     </section>
   )
 }
