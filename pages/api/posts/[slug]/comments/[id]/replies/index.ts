@@ -97,16 +97,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     }
 
-    const total = (
-      await prisma.comment.findMany({
-        where: { parentId: Number.parseInt(id as string) },
-      })
-    ).length
-
     res.status(200).send({
       status: "success",
       message: "Replies fetched successfully",
-      total,
       replies,
       lastReplyId,
       hasNextPage: lastReplyId && nextReplies ? true : false,

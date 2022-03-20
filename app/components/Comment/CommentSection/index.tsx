@@ -9,7 +9,6 @@ import { Comment } from "./Comment"
 
 const CommentSection = ({ post }: { post: Post }) => {
   const [comments, setComments] = useState<CommentModel[]>()
-  const [totalComments, setTotalComments] = useState<number>()
 
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(LoadStatus.SUCCESS)
 
@@ -20,17 +19,9 @@ const CommentSection = ({ post }: { post: Post }) => {
           "/api/posts/" + post.slug + "/comments"
         )
 
-        const { data: totalData } = await axios.get(
-          "/api/posts/" + post.slug + "/comments?replies=true"
-        )
-
         if (data.status === "success") {
           setComments(data.comments)
           setLoadStatus(LoadStatus.SUCCESS)
-        }
-
-        if (totalData.status === "success") {
-          setTotalComments(totalData.comments.length as number)
         }
       } catch (error: any) {
         console.log(error.response.data.message)
@@ -55,13 +46,14 @@ const CommentSection = ({ post }: { post: Post }) => {
           ? "An error occured"
           : comments?.length === 0
           ? "No comments yet"
-          : `${totalComments} comments`}
+          : `${post._count?.comments} comments`}
       </Heading>
       <hr className="my-4" />
       {comments &&
-        comments.map((comment, index) => (
+        comments.map((comment: CommentModel, index: number) => (
           <div key={index + comment.comment}>
             <Comment
+              replyCount={comment._count?.replies as number}
               key={index + comment.comment}
               post={post}
               comment={comment}

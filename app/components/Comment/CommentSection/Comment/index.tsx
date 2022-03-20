@@ -1,7 +1,7 @@
 import axios from "axios"
 import Markdown from "markdown-to-jsx"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import { EditCommentForm } from "../EditCommentForm"
 import { ReplyForm } from "../ReplyForm"
@@ -12,7 +12,15 @@ import { Comment as CommentModel, Post } from "@models"
 import DeleteIcon from "@icons/delete.svg"
 import EditIcon from "@icons/edit.svg"
 
-const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
+const Comment = ({
+  replyCount,
+  comment,
+  post,
+}: {
+  replyCount: number
+  comment: CommentModel
+  post: Post
+}) => {
   const {
     id,
     author: { name, username },
@@ -28,7 +36,6 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
   const [editComment, setEditComment] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
 
-  const [totalReplies, setTotalReplies] = useState<number>(0)
   const [replies, setReplies] = useState<CommentModel[]>()
   const [lastReplyId, setLastReplyId] = useState<number>()
   const [hasNextPage, setHasNextPage] = useState(false)
@@ -69,7 +76,6 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
         } else {
           setReplies(replies.concat(...data.replies))
         }
-        setTotalReplies(data.total)
         setLastReplyId(data.lastReplyId)
         setHasNextPage(data.hasNextPage)
       }
@@ -77,12 +83,6 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
       console.log(error.response.data.message)
     }
   }
-
-  useEffect(() => {
-    if (!comment.parentId) {
-      fetchReplies()
-    }
-  }, [])
 
   const createdDate = new Date(createdAt).toLocaleDateString("en-US", {
     day: "numeric",
@@ -133,7 +133,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
             {user && <ReplyForm comment={comment} post={post} />}
           </div>
         )}
-        {totalReplies !== 0 && !comment.parentId && (
+        {replyCount !== 0 && !comment.parentId && (
           <Button
             onClick={async () => {
               setShowReplies(!showReplies)
@@ -153,7 +153,11 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
               size="text-[14px] tablet:text-[16px]"
               className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
             >
-              {showReplies ? "Hide replies" : `Show ${totalReplies} replies`}
+              {showReplies
+                ? "Hide replies"
+                : `Show ${replyCount} ${
+                    replyCount === 1 ? "reply" : "replies"
+                  }`}
             </Body>
           </Button>
         )}
@@ -165,7 +169,7 @@ const Comment = ({ comment, post }: { comment: CommentModel; post: Post }) => {
                 key={index + comment.comment}
                 className="border-l-2 dark:border-neutral-500 pl-2.5 py-2 w-full"
               >
-                <Comment comment={reply} post={post} />
+                <Comment replyCount={replyCount} comment={reply} post={post} />
               </div>
             ))}
           {showReplies && hasNextPage && (

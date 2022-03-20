@@ -28,6 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             createdAt: true,
           },
         },
+        _count: { select: { comments: true } },
       },
     })
 

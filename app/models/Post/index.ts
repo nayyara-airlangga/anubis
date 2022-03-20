@@ -14,6 +14,7 @@ interface Post {
   authorId: number
   author?: User
   comments?: Comment[]
+  _count?: { comments: number }
 }
 
 export type { Post }

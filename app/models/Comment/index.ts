@@ -13,6 +13,7 @@ interface Comment {
   parentId?: number
   parent?: Comment
   replies: Comment
+  _count?: { replies: number }
 }
 
 export type { Comment }
