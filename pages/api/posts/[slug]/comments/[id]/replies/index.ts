@@ -75,10 +75,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     lastReplyId = replies.length === 0 ? null : replies[replies.length - 1].id
 
-    let nextReplies
+    let nextReply
 
     if (lastReplyId) {
-      nextReplies = await prisma.comment.findFirst({
+      nextReply = await prisma.comment.findFirst({
         where: { parentId: Number.parseInt(id as string) },
         skip: 1,
         cursor: { id: lastReplyId },
@@ -102,7 +102,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       message: "Replies fetched successfully",
       replies,
       lastReplyId,
-      hasNextPage: lastReplyId && nextReplies ? true : false,
+      hasNextPage: lastReplyId && nextReply ? true : false,
     })
   } catch (error: any) {
     res
