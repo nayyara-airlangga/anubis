@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 
 import { LoadStatus } from "@constants"
-import { Heading } from "@components"
+import { Body, Button, Heading } from "@components"
 import { Comment as CommentModel, Post } from "@models"
 
 import { Comment } from "./Comment"
@@ -12,28 +12,43 @@ const CommentSection = ({ post }: { post: Post }) => {
 
   const [loadStatus, setLoadStatus] = useState<LoadStatus>(LoadStatus.SUCCESS)
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const { data } = await axios.get(
-          "/api/posts/" + post.slug + "/comments"
-        )
+  const [lastCommentId, setLastCommentId] = useState<number>()
+  const [hasNextPage, setHasNextPage] = useState(false)
 
-        if (data.status === "success") {
+  const fetchComments = async () => {
+    setLoadStatus(LoadStatus.LOADING)
+
+    try {
+      const { data } = await axios.get(
+        "/api/posts/" +
+          post.slug +
+          "/comments?" +
+          (lastCommentId ? "lastId=" + lastCommentId : "")
+      )
+
+      if (data.status === "success") {
+        if (!comments) {
           setComments(data.comments)
-          setLoadStatus(LoadStatus.SUCCESS)
+        } else {
+          setComments(comments.concat(...data.comments))
         }
-      } catch (error: any) {
-        console.log(error.response.data.message)
-        setLoadStatus(LoadStatus.ERROR)
-      }
-    }
+        setLastCommentId(data.lastCommentId)
+        setHasNextPage(data.hasNextPage)
 
+        setLoadStatus(LoadStatus.SUCCESS)
+      }
+    } catch (error: any) {
+      console.log(error.response.data.message)
+      setLoadStatus(LoadStatus.ERROR)
+    }
+  }
+
+  useEffect(() => {
     fetchComments()
   }, [post.slug])
 
   return (
-    <div className="dark:bg-neutral-800 p-4 my-8 rounded-lg break-words">
+    <div className="dark:bg-neutral-800 p-4 my-8 rounded-lg break-words w-full">
       <Heading
         variant="h6"
         size="text-[14px] tablet:text-[16px]"
@@ -63,6 +78,33 @@ const CommentSection = ({ post }: { post: Post }) => {
             )}
           </div>
         ))}
+      {comments && hasNextPage && loadStatus !== "LOADING" && (
+        <Button
+          onClick={fetchComments}
+          padding="pt-4"
+          bgColor="bg-transparent"
+          hoverBgColor="hover:bg-transparent"
+          clickedBgColor="active:bg-transparent"
+          className="my-2 group w-full"
+        >
+          <Body
+            variant="b3"
+            size="text-[14px] tablet:text-[16px]"
+            className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+          >
+            Show more comments
+          </Body>
+        </Button>
+      )}
+      {comments && loadStatus === "LOADING" && (
+        <Body
+          variant="b3"
+          size="text-[14px] tablet:text-[16px]"
+          className="text-center mx-auto mt-2 dark:text-neutral-300"
+        >
+          Loading...
+        </Body>
+      )}
     </div>
   )
 }
