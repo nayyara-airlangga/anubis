@@ -6,6 +6,7 @@ import { useState } from "react"
 import { EditCommentForm } from "../EditCommentForm"
 import { ReplyForm } from "../ReplyForm"
 import { Body, Button } from "@components"
+import { LoadStatus } from "@constants"
 import { useAuth } from "@hooks"
 import { Comment as CommentModel, Post } from "@models"
 
@@ -35,6 +36,8 @@ const Comment = ({
 
   const [readMore, setReadMore] = useState(false)
 
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>()
+
   const [editComment, setEditComment] = useState(false)
   const [showReplies, setShowReplies] = useState(false)
 
@@ -62,6 +65,8 @@ const Comment = ({
   }
 
   const fetchReplies = async () => {
+    setLoadStatus(LoadStatus.LOADING)
+
     try {
       const { data } = await axios.get(
         "/api/posts/" +
@@ -80,9 +85,12 @@ const Comment = ({
         }
         setLastReplyId(data.lastReplyId)
         setHasNextPage(data.hasNextPage)
+
+        setLoadStatus(LoadStatus.SUCCESS)
       }
     } catch (error: any) {
       console.log(error.response.data.message)
+      setLoadStatus(LoadStatus.ERROR)
     }
   }
 
@@ -158,32 +166,43 @@ const Comment = ({
           </div>
         )}
         {replyCount !== 0 && !comment.parentId && (
-          <Button
-            onClick={async () => {
-              setShowReplies(!showReplies)
+          <div>
+            <Button
+              onClick={async () => {
+                setShowReplies(!showReplies)
 
-              if (!replies) {
-                await fetchReplies()
-              }
-            }}
-            padding="tablet:pt-2"
-            bgColor="bg-transparent"
-            hoverBgColor="hover:bg-transparent"
-            clickedBgColor="active:bg-transparent"
-            className="my-2 group"
-          >
-            <Body
-              variant="b3"
-              size="text-[14px] tablet:text-[16px]"
-              className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+                if (!replies) {
+                  await fetchReplies()
+                }
+              }}
+              padding="tablet:pt-2"
+              bgColor="bg-transparent"
+              hoverBgColor="hover:bg-transparent"
+              clickedBgColor="active:bg-transparent"
+              className="my-2 group"
             >
-              {showReplies
-                ? "Hide replies"
-                : `Show ${replyCount} ${
-                    replyCount === 1 ? "reply" : "replies"
-                  }`}
-            </Body>
-          </Button>
+              <Body
+                variant="b3"
+                size="text-[14px] tablet:text-[16px]"
+                className="text-blue-500 group-hover:text-blue-400 group-active:text-blue-300"
+              >
+                {showReplies
+                  ? "Hide replies"
+                  : `Show ${replyCount} ${
+                      replyCount === 1 ? "reply" : "replies"
+                    }`}
+              </Body>
+            </Button>
+            {loadStatus === "LOADING" && (
+              <Body
+                variant="b3"
+                size="text-[12px] tablet:text-[14px]"
+                className="mt-2 dark:text-neutral-400"
+              >
+                Loading...
+              </Body>
+            )}
+          </div>
         )}
         <div className="flex flex-col w-full">
           {showReplies &&
